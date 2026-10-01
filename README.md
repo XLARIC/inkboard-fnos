@@ -26,7 +26,7 @@
 1. 下载对应架构的 FPK，在应用中心手动安装。Intel／AMD 选择 amd64（manifest 为 x86），ARM64 选择 arm64（arm）。
 2. 常开 NAS 选择「主端」，默认不添加任何 NAS、不采集硬件。定期关机 NAS 选择「仅采集器」。
 3. 默认页面端口 18888、采集端口 18889；更改页面端口后采集接口使用下一端口，因此页面端口最大 65534。
-4. 向导设置至少 12 字节的管理密码。打开桌面管理入口，或 http://NAS局域网IP:18888/admin，搜索选择城市。受信任 HTTPS 和支持的浏览器可选定位；约 1 公里精度的经纬度交给 Open-Meteo 查询时区，填入表单后再确认保存。核心局域网 HTTP 保留手动选择。
+4. 向导设置至少 12 字节的管理密码。打开桌面管理入口，或 `http://NAS局域网IP:18888/admin`，搜索选择城市。受信任 HTTPS 和支持的浏览器可选定位；约 1 公里精度的经纬度交给 Open-Meteo 查询时区，填入表单后再确认保存。核心局域网 HTTP 保留手动选择。
 5. 电脑端管理页可添加本机 NAS，或下载采集器安装脚本，在另一台飞牛执行。脚本通过官方 appcenter-cli 安装同一 FPK，交互输入密码并校验安装包。也可用应用中心手动安装。高配 NAS 管理页生成配对码；主端网页粘贴配对码，验证并添加。
 6. Kindle 打开主端的 /basic；现代设备打开 /?mode=mobile。电脑管理页可扫码、复制链接或直接打开。查看免登录，共享配置修改需要管理员登录。
 
@@ -40,7 +40,7 @@ Intel 利用率需要系统提供 intel_gpu_top，NVIDIA 需要 nvidia-smi，AMD
 
 ## Docker：纯天气看板
 
-容器不通过特权权限读取宿主机硬件。
+容器不通过特权权限读取宿主机硬件。公开镜像为 ghcr.io/xlaric/inkboard-fnos:v0.1.0-alpha.1（amd64／arm64）。本次 macOS 环境直接拉取返回 denied，以下源码构建方式已验证可用；详见验收记录。
 
     cp .env.example .env
     # 把 .env 中 INKBOARD_BIND_IP 改为主机的局域网 IP
@@ -55,7 +55,7 @@ Intel 利用率需要系统提供 intel_gpu_top，NVIDIA 需要 nvidia-smi，AMD
 
 在电脑管理页展开「设置详细地址、经纬度与时区」，填写显示名、街道／门牌地址和坐标。时区可填 IANA 名称，留空时由 Open-Meteo 按坐标查询。天气仍按坐标获取，地址文字仅用于显示。
 
-可选配置 Nominatim 兼容搜索接口，如自建服务的 http://NAS局域网IP:8080/search。每次明确点击搜索才发送地址文字，不做自动补全；查询结果在主端私有目录缓存 30 天，每秒最多一个新查询。HTTP 仅允许私有／回环 IP，其他服务须 HTTPS，拒绝包含凭据的接口 URL。私人住址使用自建或已授权服务；公共服务须遵守 [使用政策](https://operations.osmfoundation.org/policies/nominatim/)，不要提交个人或机密数据。接口默认关闭，手动输入始终可用。
+可选配置 Nominatim 兼容搜索接口，如自建服务的 `http://NAS局域网IP:8080/search`。每次明确点击搜索才发送地址文字，不做自动补全；查询结果在主端私有目录缓存 30 天，每秒最多一个新查询。HTTP 仅允许私有／回环 IP，其他服务须 HTTPS，拒绝包含凭据的接口 URL。私人住址使用自建或已授权服务；公共服务须遵守 [使用政策](https://operations.osmfoundation.org/policies/nominatim/)，不要提交个人或机密数据。接口默认关闭，手动输入始终可用。
 
 ## Kindle Voyage 与其他显示设备
 
