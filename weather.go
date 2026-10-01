@@ -79,7 +79,7 @@ func formatDifference(seconds int) string {
 	return fmt.Sprintf("比本地%s %d 小时 %d 分", word, h, m)
 }
 func locateCity(ctx context.Context, client *http.Client, latitude, longitude float64) (City, error) {
-	c := City{Name: "定位点", Latitude: math.Round(latitude*100) / 100, Longitude: math.Round(longitude*100) / 100, Timezone: "UTC"}
+	c := City{Name: "定位点", Latitude: latitude, Longitude: longitude, Timezone: "UTC"}
 	if e := validateCity(c); e != nil {
 		return City{}, e
 	}
@@ -90,7 +90,7 @@ func resolveTimezone(ctx context.Context, client *http.Client, c City) (City, er
 	if e := validateCity(c); e != nil {
 		return City{}, e
 	}
-	q := url.Values{"latitude": {strconv.FormatFloat(c.Latitude, 'f', 6, 64)}, "longitude": {strconv.FormatFloat(c.Longitude, 'f', 6, 64)}, "timezone": {"auto"}, "forecast_days": {"1"}, "current": {"temperature_2m"}}
+	q := url.Values{"latitude": {strconv.FormatFloat(c.Latitude, 'f', -1, 64)}, "longitude": {strconv.FormatFloat(c.Longitude, 'f', -1, 64)}, "timezone": {"auto"}, "forecast_days": {"1"}, "current": {"temperature_2m"}}
 	var v struct {
 		Timezone string `json:"timezone"`
 	}
@@ -164,7 +164,7 @@ func floatCode(v *float64) int {
 	return int(*v)
 }
 func fetchWeather(ctx context.Context, client *http.Client, c City, now time.Time) (*Weather, error) {
-	q := url.Values{"latitude": {strconv.FormatFloat(c.Latitude, 'f', 6, 64)}, "longitude": {strconv.FormatFloat(c.Longitude, 'f', 6, 64)}, "timezone": {c.Timezone}, "past_days": {"1"}, "forecast_days": {"16"}, "timeformat": {"unixtime"}, "wind_speed_unit": {"kmh"}}
+	q := url.Values{"latitude": {strconv.FormatFloat(c.Latitude, 'f', -1, 64)}, "longitude": {strconv.FormatFloat(c.Longitude, 'f', -1, 64)}, "timezone": {c.Timezone}, "past_days": {"1"}, "forecast_days": {"16"}, "timeformat": {"unixtime"}, "wind_speed_unit": {"kmh"}}
 	q.Set("current", "temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m,precipitation,pressure_msl")
 	q.Set("hourly", "temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m,precipitation,precipitation_probability,pressure_msl")
 	q.Set("daily", "temperature_2m_min,temperature_2m_max,weather_code,precipitation_probability_max,precipitation_sum,wind_speed_10m_max,uv_index_max,sunrise,sunset")

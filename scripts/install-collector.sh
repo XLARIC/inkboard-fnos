@@ -3,7 +3,7 @@
 # No hub address, pairing credential, or administrator password is embedded.
 set -euo pipefail
 umask 077
-release=0.1.0-alpha.1
+release=0.1.0-alpha.2
 base="https://github.com/XLARIC/inkboard-fnos/releases/download/v$release"
 [ "$(id -u)" = 0 ] || { echo "请查看脚本后使用 sudo bash collector.sh 执行。"; exit 1; }
 [ -t 0 ] || { echo "需要交互式终端输入配置，不能直接管道执行。"; exit 1; }

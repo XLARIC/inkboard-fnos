@@ -1,5 +1,5 @@
 appname = inkboard-fnos
-version = 0.1.0
+version = 0.1.1
 display_name = InkBoard 墨水屏天气与 NAS
 desc = 局域网天气、三地时钟与飞牛 NAS 看板。Kindle 轻量入口，存储空间与磁盘分开显示。预览版，实机兼容性待验收。
 platform = x86

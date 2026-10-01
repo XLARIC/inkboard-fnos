@@ -563,6 +563,17 @@ func (a *App) adminAPI(w http.ResponseWriter, r *http.Request) {
 	}
 	var e error
 	switch path {
+	case "map-location":
+		var b struct{ Input string }
+		e = bodyJSON(w, r, &b)
+		if e == nil {
+			var point MapLocation
+			point, e = parseMapLocation(b.Input)
+			if e == nil {
+				writeJSON(w, point)
+				return
+			}
+		}
 	case "geocoder":
 		var b struct{ URL string }
 		e = bodyJSON(w, r, &b)

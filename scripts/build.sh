@@ -30,4 +30,4 @@ if command -v fnpack >/dev/null;then
   mv "$target"/*.fpk "dist/inkboard-fnos-$version-$arch.fpk"
  done
 fi
-if command -v sha256sum >/dev/null;then (cd dist;sha256sum *.tar.gz *.fpk >SHA256SUMS);else (cd dist;shasum -a 256 *.tar.gz *.fpk >SHA256SUMS);fi
+if command -v sha256sum >/dev/null;then (cd dist;sha256sum "inkboard-linux-$version-"*.tar.gz "inkboard-fnos-$version-"*.fpk >SHA256SUMS);else (cd dist;shasum -a 256 "inkboard-linux-$version-"*.tar.gz "inkboard-fnos-$version-"*.fpk >SHA256SUMS);fi
