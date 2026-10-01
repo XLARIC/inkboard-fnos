@@ -2,7 +2,7 @@ package main
 
 import "time"
 
-const version = "0.1.0-alpha.4"
+const version = "0.1.0-alpha.5"
 const schemaVersion = 1
 
 type Metric struct {

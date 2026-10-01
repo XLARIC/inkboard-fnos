@@ -87,3 +87,8 @@ body.board{position:fixed;top:0;right:0;bottom:0;left:0;overflow:hidden;margin:0
 @media(min-width:701px) and (min-height:451px){.board .sheet:not([data-main="weather"]){grid-template-areas:'state system system' 'gpu volumes disks' 'network io sensors'}.board .metric-grid.rail>div{flex:1 0 140px;width:140px;min-width:140px}}
 @media(max-width:700px),(max-height:450px){.board .nas-summary{display:none}}
 .board.legacy .nas-summary{display:none}
+/* Hardware strings and unavailable reasons vary by device. Grow cards along
+   the horizontal rail instead of adding lines that would be clipped. */
+.board [data-block$="-disks"] .rows .row,.board [data-block$="-volumes"] .rows .row,.board [data-block$="-gpu"] .rows .row,.board [data-block$="-network"] .rows .row,.board [data-block$="-io"] .rows .row{width:auto!important;max-width:none}
+.board .detail-row{width:max-content;min-width:160px;max-width:none}.board [data-block$="-disks"] .detail-row{min-width:240px}.board .detail-row p,.board .detail-row small,.board .detail-row>b,.board .detail-row .line{white-space:nowrap}.board .gpu-set .detail-row{width:auto;min-width:190px}.board .metric-grid.rail>div{flex:0 0 auto;width:auto;min-width:160px}.board .metric-grid.rail small{white-space:nowrap}.board.legacy .metric-grid.rail>div{width:auto;min-width:160px}
+.board .detail-row p small{display:inline;font-size:.85em;line-height:inherit}
