@@ -13,7 +13,7 @@
             "value": "hub"
           },
           {
-            "label": "仅采集器（高配 NAS）",
+            "label": "仅采集器（被监控设备）",
             "value": "agent"
           }
         ]

@@ -21,6 +21,7 @@ var templates = template.Must(template.New("").Funcs(template.FuncMap{
 	"bytes":   formatBytes,
 	"status":  statusText,
 	"stamp":   func(t time.Time) string { return t.Format("01-02 15:04 MST") },
+	"unix":    func(t time.Time) int64 { return t.Unix() },
 }).ParseFS(webFiles, "templates/*.html"))
 
 type Block struct {
@@ -34,13 +35,10 @@ type Group struct {
 	Blocks   []Block
 }
 type PageData struct {
-	Display           Display
-	Groups            []Group
-	Blocks            []Block
-	Title, Main, Date string
-	Page, Pages       int
-	Prev, Next        string
-	Basic, History    bool
+	Display        Display
+	Groups         []Group
+	Title, Main    string
+	Basic, History bool
 }
 
 func optional(p *float64, unit string) string {
@@ -103,16 +101,16 @@ func renderPart(name string, v any) template.HTML {
 	return template.HTML(b.String())
 }
 func (a *App) groups(d Display, history bool) []Group {
+	return a.groupsForDate(d, history, "")
+}
+func (a *App) groupsForDate(d Display, history bool, selectedDate string) []Group {
+	return a.groupsForSelection(d, history, selectedDate, "")
+}
+func (a *App) groupsForSelection(d Display, history bool, selectedDate, selectedHour string) []Group {
 	groups := []Group{}
 	if d.Role == "hub" {
 		g := Group{ID: "weather", Name: "天气"}
-		for start := 0; start < len(d.Clocks); start += 3 {
-			end := start + 3
-			if end > len(d.Clocks) {
-				end = len(d.Clocks)
-			}
-			g.Blocks = append(g.Blocks, Block{ID: fmt.Sprintf("clocks-%d", start/3), Title: "城市时间", Content: renderPart("clocks", d.Clocks[start:end])})
-		}
+		g.Blocks = append(g.Blocks, Block{ID: "clocks-0", Title: "城市时间", Content: renderPart("clocks", d.Clocks)})
 		if d.Weather == nil {
 			g.Blocks = append(g.Blocks, Block{ID: "welcome", Title: "天气", Content: renderPart("welcome", d)})
 		} else {
@@ -125,24 +123,49 @@ func (a *App) groups(d Display, history bool) []Group {
 					break
 				}
 			}
+			heroWeather := *w
+			currentTitle := "现在 · " + w.City.Name
+			if w.Error != "" {
+				currentTitle = "缓存 · " + currentTitle
+			}
+			hourUnix, _ := strconv.ParseInt(selectedHour, 10, 64)
+			loc, _ := time.LoadLocation(w.City.Timezone)
+			for _, h := range w.Hourly {
+				if h.Time.Unix() == hourUnix {
+					heroWeather.Current = h
+					currentTitle = h.Time.In(loc).Format("01-02 15:04 MST") + " · 分时详情"
+					for _, day := range w.Days {
+						if day.Date == h.Time.In(loc).Format("2006-01-02") {
+							currentDay = day
+							break
+						}
+					}
+					break
+				}
+			}
 			hero := struct {
 				Weather *Weather
 				Day     Day
 				Demo    bool
-			}{w, currentDay, d.Demo}
-			g.Blocks = append(g.Blocks, Block{ID: "current", Title: "现在 · " + w.City.Name, Content: renderPart("current", hero)})
-			hours := dayHours(w, today)
-			rows := []template.HTML{}
-			loc, _ := time.LoadLocation(w.City.Timezone)
-			for _, h := range hours {
-				if h.Time.In(loc).Hour()%3 == 0 {
-					rows = append(rows, renderPart("hour", struct {
-						Conditions Conditions
-						Hour       string
-					}{h, h.Time.In(loc).Format("15:04")}))
-				}
+			}{&heroWeather, currentDay, d.Demo}
+			g.Blocks = append(g.Blocks, Block{ID: "current", Title: currentTitle, Content: renderPart("current", hero)})
+			date := today
+			if len(dayHours(w, selectedDate)) > 0 {
+				date = selectedDate
 			}
-			g.Blocks = append(g.Blocks, Block{ID: "today", Title: "今日分时 · 每三小时摘要", Rows: rows})
+			hours := dayHours(w, date)
+			rows := []template.HTML{}
+			for _, h := range hours {
+				rows = append(rows, renderPart("hour", struct {
+					Conditions Conditions
+					Hour       string
+				}{h, h.Time.In(loc).Format("15:04 MST")}))
+			}
+			title := "今日分时"
+			if date != today {
+				title = date + " · 分时天气"
+			}
+			g.Blocks = append(g.Blocks, Block{ID: "today", Title: title, Rows: rows})
 			rows = []template.HTML{}
 			yesterday := d.Now.In(loc).AddDate(0, 0, -1).Format("2006-01-02")
 			for _, day := range w.Days {
@@ -159,20 +182,28 @@ func (a *App) groups(d Display, history bool) []Group {
 					Yesterday bool
 				}{day, label, day.Date == yesterday}))
 			}
-			g.Blocks = append(g.Blocks, Block{ID: "forecast", Title: "17 日预报 · 点击日期看逐小时", Rows: rows})
+			g.Blocks = append(g.Blocks, Block{ID: "forecast", Title: "昨天 · 今天 · 未来 15 天", Rows: rows})
 		}
 		if d.Weather != nil {
 			for i := range g.Blocks {
-				if !strings.HasPrefix(g.Blocks[i].ID, "clocks-") {
+				if g.Blocks[i].ID == "current" {
 					g.Blocks[i].Source = renderPart("weather-source", d.Weather)
 				}
 			}
 		}
+		g.Blocks = append(g.Blocks, Block{ID: "controls", Title: "INKBOARD", Content: renderPart("controls", d)})
 		groups = append(groups, g)
 	}
 	for _, n := range d.NAS {
 		g := Group{ID: n.ID, Name: n.Name}
-		g.Blocks = append(g.Blocks, Block{ID: n.ID + "-state", Title: n.Name, Content: renderPart("nas-state", n)})
+		if history && n.Status != "online" {
+			n.Reason = "历史快照，以下指标不是实时状态。" + n.Reason
+		}
+		stateTitle := n.Name
+		if history && n.Status != "online" {
+			stateTitle = "历史快照 · " + n.Name
+		}
+		g.Blocks = append(g.Blocks, Block{ID: n.ID + "-state", Title: stateTitle, Content: renderPart("nas-state", n)})
 		s := n.Snapshot
 		if n.Status != "online" && !history {
 			g.Blocks = append(g.Blocks, Block{ID: n.ID + "-offline", Title: "实时指标", Content: renderPart("offline", n)})
@@ -247,12 +278,13 @@ func (a *App) dashboardPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	d := a.display()
-	p := PageData{Display: d, Groups: a.groups(d, false), Title: "InkBoard · 天气与 NAS"}
+	p := PageData{Display: d, Groups: a.groupsForSelection(d, false, r.URL.Query().Get("date"), r.URL.Query().Get("hour")), Main: r.URL.Query().Get("main"), Title: "InkBoard · 天气与 NAS"}
 	htmlResponse(w, "dashboard.html", p)
 }
 func (a *App) fragments(w http.ResponseWriter, r *http.Request) {
 	d := a.display()
-	htmlResponse(w, "groups", PageData{Display: d, Groups: a.groups(d, false)})
+	history := r.URL.Query().Get("history") == "1"
+	htmlResponse(w, "groups", PageData{Display: d, Groups: a.groupsForSelection(d, history, r.URL.Query().Get("date"), r.URL.Query().Get("hour"))})
 }
 func htmlResponse(w http.ResponseWriter, name string, v any) {
 	var b bytes.Buffer
@@ -263,45 +295,10 @@ func htmlResponse(w http.ResponseWriter, name string, v any) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	_, _ = w.Write(b.Bytes())
 }
-func basicPages(blocks []Block, rows int) [][]Block {
-	pages := [][]Block{}
-	for _, b := range blocks {
-		if len(b.Rows) == 0 {
-			if rows >= 4 && b.ID == "current" && len(pages) == 1 && len(pages[0]) == 1 && pages[0][0].ID == "clocks-0" {
-				pages[0] = append(pages[0], b)
-				continue
-			}
-			pages = append(pages, []Block{b})
-			continue
-		}
-		limit := rows
-		if strings.HasSuffix(b.ID, "-disks") || strings.HasSuffix(b.ID, "-volumes") {
-			if limit > 2 {
-				limit = 2
-			}
-		}
-		if strings.HasSuffix(b.ID, "-gpu") {
-			limit = 1
-		}
-		for i := 0; i < len(b.Rows); i += limit {
-			end := i + limit
-			if end > len(b.Rows) {
-				end = len(b.Rows)
-			}
-			part := b
-			part.Rows = b.Rows[i:end]
-			pages = append(pages, []Block{part})
-		}
-	}
-	if len(pages) == 0 {
-		pages = append(pages, []Block{})
-	}
-	return pages
-}
 func (a *App) basicPage(w http.ResponseWriter, r *http.Request) {
 	d := a.display()
 	history := r.URL.Query().Get("history") == "1"
-	g := a.groups(d, history)
+	g := a.groupsForSelection(d, history, r.URL.Query().Get("date"), r.URL.Query().Get("hour"))
 	if len(g) == 0 {
 		http.Error(w, "暂无内容", 503)
 		return
@@ -314,47 +311,19 @@ func (a *App) basicPage(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 	}
-	rows, _ := strconv.Atoi(r.URL.Query().Get("rows"))
-	if rows < 2 || rows > 10 {
-		rows = 4
-	}
-	pages := basicPages(selected.Blocks, rows)
-	i, _ := strconv.Atoi(r.URL.Query().Get("page"))
-	if i < 0 || i >= len(pages) {
-		i = 0
-	}
-	suffix := ""
-	if history {
-		suffix = "&history=1"
-	}
-	prev, next := (i+len(pages)-1)%len(pages), (i+1)%len(pages)
-	p := PageData{Display: d, Groups: g, Blocks: pages[i], Title: selected.Name, Main: selected.ID, Page: i + 1, Pages: len(pages), Basic: true, History: history, Prev: fmt.Sprintf("/basic?main=%s&page=%d&rows=%d%s", selected.ID, prev, rows, suffix), Next: fmt.Sprintf("/basic?main=%s&page=%d&rows=%d%s", selected.ID, next, rows, suffix)}
-	htmlResponse(w, "basic.html", p)
+	p := PageData{Display: d, Groups: g, Title: selected.Name + " · InkBoard", Main: selected.ID, Basic: true, History: history}
+	htmlResponse(w, "dashboard.html", p)
 }
 func (a *App) hourlyPage(w http.ResponseWriter, r *http.Request) {
-	d := a.display()
 	date := r.URL.Query().Get("date")
-	h := dayHours(d.Weather, date)
+	h := dayHours(a.display().Weather, date)
 	if len(h) == 0 {
 		http.Error(w, "该日期没有逐小时数据", 404)
 		return
 	}
-	loc, _ := time.LoadLocation(d.Weather.City.Timezone)
-	b := Block{ID: "detail", Title: date + " · " + d.Weather.City.Name}
-	b.Source = renderPart("weather-source", d.Weather)
-	for _, v := range h {
-		b.Rows = append(b.Rows, renderPart("hour-detail", struct {
-			Conditions Conditions
-			Hour       string
-		}{v, v.Time.In(loc).Format("15:04 MST")}))
-	}
-	i, _ := strconv.Atoi(r.URL.Query().Get("page"))
-	pages := basicPages([]Block{b}, 2)
-	if i < 0 || i >= len(pages) {
-		i = 0
-	}
-	p := PageData{Display: d, Blocks: pages[i], Title: date + " · 逐小时", Date: date, Page: i + 1, Pages: len(pages), Basic: true, Prev: fmt.Sprintf("/hourly?date=%s&page=%d", date, (i+len(pages)-1)%len(pages)), Next: fmt.Sprintf("/hourly?date=%s&page=%d", date, (i+1)%len(pages))}
-	htmlResponse(w, "basic.html", p)
+	// Old bookmarks retain a useful destination; details stay in the weather screen.
+	d := a.display()
+	htmlResponse(w, "dashboard.html", PageData{Display: d, Groups: a.groupsForSelection(d, false, date, r.URL.Query().Get("hour")), Title: date + " · 分时天气", Main: "weather"})
 }
 func (a *App) adminPage(w http.ResponseWriter, r *http.Request) {
 	htmlResponse(w, "admin.html", struct {

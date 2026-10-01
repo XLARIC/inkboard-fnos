@@ -1,8 +1,5 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="InkBoard"><title>{{.Title}}</title><link rel="stylesheet" href="/assets/style.css"><link rel="stylesheet" href="/assets/dashboard-modern.css"><link rel="apple-touch-icon" href="/assets/icon.png"><script src="/assets/dashboard.js" defer></script></head><body class="display mobile">
-<header class="topbar"><a href="/">INKBOARD{{if .Display.Demo}} · 演示{{end}}</a><span id="sync-status">局域网看板</span><button id="fullscreen" type="button">全屏</button><a href="/device">显示</a><a href="/admin">管理</a></header>
-<div id="source">{{template "groups" .}}</div><main id="book" aria-live="polite"></main>
-<nav id="pager" class="pager"><button id="prev" aria-label="上一页">← 上页</button><button id="main-menu">天气</button><span id="page-label"></span><button id="rotate">轮播关</button><button id="next" aria-label="下一页">下页 →</button></nav>
-<div id="main-picker" class="overlay" hidden><h2>选择主屏</h2><div id="main-options"></div><button id="close-picker">关闭</button></div>
-<noscript><p>该浏览器使用轻量页面更合适。</p><a class="button" href="/basic">打开 Kindle 轻量版</a></noscript>
-<footer class="fallback"><a href="/basic">Kindle 轻量版</a> · 天气数据 <a href="https://open-meteo.com/">Open-Meteo</a> · 本机配置独立保存</footer>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="InkBoard"><title>{{.Title}}</title><link rel="stylesheet" href="/assets/style.css"><link rel="stylesheet" href="/assets/board.css">{{if not .Basic}}<link rel="stylesheet" href="/assets/dashboard-modern.css">{{end}}<link rel="apple-touch-icon" href="/assets/icon.png"><script src="/assets/dashboard.js" defer></script></head><body class="display board {{if .Basic}}ink legacy{{else}}mobile{{end}}" data-basic="{{.Basic}}" data-history="{{.History}}">
+<main id="book" tabindex="-1" aria-label="看板：左右滑动或使用翻页键切换">{{template "groups" .}}</main>
+<noscript><p class="no-script">开启浏览器 JavaScript 可使用局部更新与滑动翻页。<a href="/admin">管理设置</a></p></noscript>
+<div id="board-notice" class="board-notice" role="status" hidden></div>
 </body></html>
