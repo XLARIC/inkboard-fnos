@@ -1,0 +1,47 @@
+name: Versioned release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+  packages: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-go@v7.0.0
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - name: Verify version and tests
+        run: |
+          test "$(go run . version)" = "${GITHUB_REF_NAME#v}"
+          go test -race ./...
+          go vet ./...
+      - name: Official fnpack 1.2.3
+        run: |
+          curl -fLsS https://static2.fnnas.com/fnpack/fnpack-1.2.3-linux-amd64 -o /tmp/fnpack
+          echo '54b97fa7b70968c4d05c79840f5daeff508957d0bb2062fdb0376d00d9615c93  /tmp/fnpack' | sha256sum -c -
+          chmod +x /tmp/fnpack
+          echo /tmp >> "$GITHUB_PATH"
+      - run: bash scripts/build.sh
+      - run: docker run --rm -v "$PWD:/source:ro" debian:bookworm-slim bash /source/scripts/test-fpk.sh
+      - name: Publish packages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/*.fpk dist/*.tar.gz dist/SHA256SUMS --verify-tag --prerelease --title "InkBoard $GITHUB_REF_NAME" --notes-file docs/发行说明.md
+      - uses: docker/setup-qemu-action@v4.4.0
+      - uses: docker/setup-buildx-action@v4.4.1
+      - uses: docker/login-action@v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+      - uses: docker/build-push-action@v7.4.0
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: ghcr.io/xlaric/inkboard-fnos:${{ github.ref_name }}

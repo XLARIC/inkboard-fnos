@@ -1,0 +1,50 @@
+#!/bin/bash
+set -euo pipefail
+export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+unset wizard_password
+: "${TRIM_APPDEST:?}" "${TRIM_PKGETC:?}" "${TRIM_PKGVAR:?}" "${TRIM_USERNAME:?}"
+RUNDIR=/run/inkboard-fnos
+BIN="$TRIM_APPDEST/bin/inkboard"
+WEBPID="$RUNDIR/web.pid"
+HELPERPID="$RUNDIR/helper.pid"
+valid_pid() {
+ [ -f "$1" ] || return 1
+ local pid
+ pid=$(cat "$1")
+ [[ "$pid" =~ ^[0-9]+$ ]] && kill -0 "$pid" 2>/dev/null || return 1
+ if [ "$1" = "$HELPERPID" ]; then
+  [ "$(readlink "/proc/$pid/exe")" = "$(readlink -f "$BIN")" ] || return 1
+ else
+  [ "$(readlink "/proc/$pid/exe")" = "$(readlink -f "$(command -v runuser)")" ] || return 1
+  tr '\0' '\n' <"/proc/$pid/cmdline" | grep -Fxq "$BIN" || return 1
+ fi
+}
+stop_pid() {
+ local file="$1" pid
+ if valid_pid "$file"; then
+  pid=$(cat "$file");kill -TERM "$pid" || true
+  for i in {1..12}; do kill -0 "$pid" 2>/dev/null || break;sleep 1;done
+  if valid_pid "$file";then kill -KILL "$pid" || true;fi
+ fi
+ rm -f "$file"
+}
+case "${1:-}" in
+ start)
+  if valid_pid "$WEBPID" && valid_pid "$HELPERPID";then exit 0;fi
+  stop_pid "$WEBPID";stop_pid "$HELPERPID"
+  install -d -m 2750 -o root -g "$TRIM_USERNAME" "$RUNDIR"
+  "$BIN" helper -snapshot-file "$RUNDIR/snapshot.json" -control-file "$TRIM_PKGETC/config.json" >>"$RUNDIR/helper.log" 2>&1 &
+  printf '%s\n' "$!" >"$HELPERPID";chmod 600 "$HELPERPID"
+  runuser -u "$TRIM_USERNAME" -- "$BIN" serve -config-dir "$TRIM_PKGETC" -data-dir "$TRIM_PKGVAR/cache" -snapshot-file "$RUNDIR/snapshot.json" >>"$RUNDIR/service.log" 2>&1 &
+  printf '%s\n' "$!" >"$WEBPID";chmod 600 "$WEBPID"
+  sleep 2
+  if ! valid_pid "$WEBPID" || ! valid_pid "$HELPERPID";then
+   stop_pid "$WEBPID";stop_pid "$HELPERPID"
+   printf '%s\n' "服务启动失败，请检查端口占用和服务日志。" >"${TRIM_TEMP_LOGFILE:-$TRIM_PKGVAR/start-error.log}"
+   exit 1
+  fi
+  ;;
+ stop) stop_pid "$WEBPID";stop_pid "$HELPERPID";;
+ status) if valid_pid "$WEBPID" && valid_pid "$HELPERPID";then exit 0;else exit 3;fi;;
+ *) exit 1;;
+esac

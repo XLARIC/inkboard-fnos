@@ -1,0 +1,29 @@
+#!/bin/bash
+set -euo pipefail
+export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+: "${TRIM_APPDEST:?}" "${TRIM_PKGETC:?}" "${TRIM_PKGVAR:?}" "${TRIM_USERNAME:?}"
+fail(){ printf '%s\n' "$1" >"${TRIM_TEMP_LOGFILE:-$TRIM_PKGVAR/setup-error.log}";exit 1; }
+case "${wizard_role:-hub}" in hub|agent) ;; *) fail "角色无效";;esac
+port="${wizard_port:-18888}"
+[[ "$port" =~ ^[0-9]{4,5}$ ]] || fail "端口须为数字"
+port=$((10#$port))
+[ "$port" -ge 1024 ] && [ "$port" -le 65534 ] || fail "端口须为 1024–65534"
+address="${wizard_listen:-0.0.0.0}"
+install -d -m 700 -o "$TRIM_USERNAME" -g "$TRIM_USERNAME" "$TRIM_PKGETC" "$TRIM_PKGVAR/cache"
+password_file=""
+trap '[ -z "$password_file" ] || rm -f "$password_file"' EXIT
+args=()
+if [ -n "${wizard_password:-}" ];then
+ password_file=$(mktemp "$TRIM_PKGETC/.password-XXXXXX")
+ chmod 600 "$password_file";printf '%s\n' "$wizard_password" >"$password_file"
+ chown "$TRIM_USERNAME:$TRIM_USERNAME" "$password_file"
+ args=(-password-file "$password_file")
+elif [ ! -f "$TRIM_PKGETC/config.json" ];then fail "安装需要管理密码（至少 12 字节）";fi
+unset wizard_password
+runuser -u "$TRIM_USERNAME" -- "$TRIM_APPDEST/bin/inkboard" init -config-dir "$TRIM_PKGETC" -data-dir "$TRIM_PKGVAR/cache" -role "${wizard_role:-hub}" -listen "$address:$port" -agent-listen "$address:$((port+1))" "${args[@]}" || fail "配置校验失败，请检查监听地址和密码长度"
+for entry in Application Admin;do
+ path=/;title="InkBoard 看板";if [ "$entry" = Admin ];then path=/admin;title="InkBoard 管理";fi
+ printf '"inkboard-fnos.%s":{"title":"%s","icon":"images/icon_{0}.png","type":"url","protocol":"http","port":"%s","url":"%s","allUsers":false}' "$entry" "$title" "$port" "$path" >"$TRIM_PKGVAR/ui-$entry.tmp"
+done
+{ printf '{".url":{';cat "$TRIM_PKGVAR/ui-Application.tmp";printf ',';cat "$TRIM_PKGVAR/ui-Admin.tmp";printf '}}\n';} >"$TRIM_APPDEST/ui/config"
+rm -f "$TRIM_PKGVAR/ui-Application.tmp" "$TRIM_PKGVAR/ui-Admin.tmp"

@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+"$(dirname "$0")/main" stop
+runuser -u "$TRIM_USERNAME" -- mkdir -p "$TRIM_PKGVAR/backups"
+if [ -d "$TRIM_PKGETC" ];then
+ umask 077
+ runuser -u "$TRIM_USERNAME" -- tar -czf "$TRIM_PKGVAR/backups/config-$(date +%Y%m%d-%H%M%S).tar.gz" -C "$TRIM_PKGETC" .
+fi

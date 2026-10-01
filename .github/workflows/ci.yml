@@ -1,0 +1,30 @@
+name: Test and package
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-go@v7.0.0
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - run: go test -race ./...
+      - run: go vet ./...
+      - name: Official fnpack 1.2.3
+        run: |
+          curl -fLsS https://static2.fnnas.com/fnpack/fnpack-1.2.3-linux-amd64 -o /tmp/fnpack
+          echo '54b97fa7b70968c4d05c79840f5daeff508957d0bb2062fdb0376d00d9615c93  /tmp/fnpack' | sha256sum -c -
+          chmod +x /tmp/fnpack
+          echo /tmp >> "$GITHUB_PATH"
+      - run: bash scripts/build.sh
+      - name: Isolated fnOS lifecycle simulation
+        run: docker run --rm -v "$PWD:/source:ro" debian:bookworm-slim bash /source/scripts/test-fpk.sh
+      - name: Docker build
+        run: docker build -t inkboard-ci .

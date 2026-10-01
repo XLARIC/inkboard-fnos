@@ -1,0 +1,11 @@
+[
+  {
+    "stepTitle": "InkBoard",
+    "items": [
+      {
+        "type": "tips",
+        "helpText": "升级前备份配置与配对密钥，保持城市、NAS 和密码。"
+      }
+    ]
+  }
+]

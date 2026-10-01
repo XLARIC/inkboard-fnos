@@ -1,0 +1,70 @@
+[
+  {
+    "stepTitle": "InkBoard 设置",
+    "items": [
+      {
+        "type": "select",
+        "field": "wizard_role",
+        "label": "运行角色",
+        "initValue": "hub",
+        "options": [
+          {
+            "label": "主端（默认纯天气，网页添加 NAS）",
+            "value": "hub"
+          },
+          {
+            "label": "仅采集器（高配 NAS）",
+            "value": "agent"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "field": "wizard_listen",
+        "label": "监听 IP",
+        "initValue": "0.0.0.0",
+        "rules": [
+          {
+            "required": true,
+            "message": "请输入监听 IP"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "field": "wizard_port",
+        "label": "页面端口（采集接口自动使用下一端口）",
+        "initValue": "18888",
+        "rules": [
+          {
+            "required": true,
+            "message": "请输入端口"
+          },
+          {
+            "pattern": "^[0-9]{4,5}$",
+            "message": "1024–65534"
+          }
+        ]
+      },
+      {
+        "type": "password",
+        "field": "wizard_password",
+        "label": "管理密码（至少 12 字节）",
+        "rules": [
+          {
+            "required": true,
+            "message": "请输入管理密码"
+          },
+          {
+            "min": 12,
+            "message": "至少 12 字节"
+          }
+        ]
+      },
+      {
+        "type": "tips",
+        "helpText": "仅局域网访问。安装后通过网页选择城市和配对 NAS。硬件助手只读取统计并生成快照；网页进程以普通应用用户运行。"
+      }
+    ]
+  }
+]

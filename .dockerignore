@@ -1,0 +1,7 @@
+.git
+dist
+.local
+work
+bin
+*.fpk
+*.tar.gz

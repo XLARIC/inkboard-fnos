@@ -1,0 +1,3 @@
+#!/bin/bash
+set -euo pipefail
+"$TRIM_APPDEST/bin/inkboard" print-wizard -config-dir "$TRIM_PKGETC" -data-dir "$TRIM_PKGVAR/cache" >"$(dirname "$0")/../wizard/config"

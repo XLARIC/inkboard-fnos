@@ -1,0 +1,4 @@
+#!/bin/bash
+set -euo pipefail
+"$TRIM_APPDEST/bin/inkboard" print-entry -config-dir "$TRIM_PKGETC" -data-dir "$TRIM_PKGVAR/cache" >"$TRIM_APPDEST/ui/config"
+exec "$(dirname "$0")/main" start

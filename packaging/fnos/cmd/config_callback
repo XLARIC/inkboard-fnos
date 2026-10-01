@@ -1,0 +1,5 @@
+#!/bin/bash
+set -euo pipefail
+"$(dirname "$0")/main" stop
+"$(dirname "$0")/setup"
+"$(dirname "$0")/main" start

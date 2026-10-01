@@ -1,0 +1,7 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="60"><title>{{.Title}} · InkBoard</title><link rel="stylesheet" href="/assets/style.css"></head><body class="basic ink">
+<header class="topbar"><a href="/basic">INKBOARD{{if .Display.Demo}} · 演示{{end}}</a><span>{{.Title}}</span><a href="/?mode=mobile">彩色版</a></header>
+{{if .History}}<p class="notice">历史快照 · 以下指标不是实时状态</p>{{end}}
+<main>{{range .Blocks}}{{template "block" .}}{{end}}</main>
+<nav class="pager"><a class="button" href="{{.Prev}}">← 上页</a><span>{{.Page}} / {{.Pages}}</span><a class="button" href="{{.Next}}">下页 →</a></nav>
+{{if .Date}}<p><a class="button" href="/basic?main=weather">返回天气</a></p><p class="caption">昨天为模型数据回顾；所有时间按所在地时区，重复小时带夏令时标识。</p>{{else}}<nav class="main-links">{{range .Groups}}<a class="button" href="/basic?main={{.ID}}">{{.Name}}</a>{{end}}</nav><p class="caption">每分钟刷新本页 · <a href="/basic?main={{.Main}}&amp;rows=2">大字少行</a> / <a href="/basic?main={{.Main}}&amp;rows=4">标准</a> / <a href="/basic?main={{.Main}}&amp;rows=8">多行</a> · <a href="/admin">管理</a></p>{{end}}
+<footer>天气来源 <a href="https://open-meteo.com/">Open-Meteo</a> · 局域网 HTTP</footer></body></html>
