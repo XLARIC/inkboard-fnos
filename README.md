@@ -6,7 +6,7 @@
 
 [下载预览安装包](https://github.com/XLARIC/inkboard-fnos/releases/tag/v0.1.0-alpha.5) · [验收记录](docs/验收记录.md)
 
-![彩色看板演示](docs/screenshots/color-dashboard.jpg)
+![彩色看板演示](docs/screenshots/one-screen-weather.jpg)
 
 ## 功能
 
