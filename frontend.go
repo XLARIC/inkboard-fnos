@@ -332,5 +332,7 @@ func (a *App) adminPage(w http.ResponseWriter, r *http.Request) {
 		Bootstrap, Demo bool
 	}{a.runtime.Role, a.config().PasswordHash == "", a.demo})
 }
-func (a *App) devicePage(w http.ResponseWriter, r *http.Request) { htmlResponse(w, "device.html", nil) }
-func cleanText(s string) string                                  { return strings.TrimSpace(s) }
+func (a *App) devicePage(w http.ResponseWriter, r *http.Request) {
+	htmlResponse(w, "device.html", struct{ Version string }{version})
+}
+func cleanText(s string) string { return strings.TrimSpace(s) }

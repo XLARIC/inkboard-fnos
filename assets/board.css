@@ -96,3 +96,70 @@ progress{display:block;margin-top:5px;width:100%;height:5px;border:0;background:
 @media(max-height:450px){.board:not(.legacy) [data-block$="-offline"] .notice{padding:6px;font-size:11px}.board:not(.legacy) .blank-metrics p{font-size:10px;margin:3px 0}.board:not(.legacy) [data-block$="-offline"]>p{font-size:10px}}
 
 @media(max-width:400px) and (min-height:451px){.legacy .clock small{margin-top:0}}
+
+/* The Kindle browser toolbar overlays web content; geometry reserves its space.
+   Notifications are anchored to that same reduced area. */
+.board-notice{position:absolute}
+.kindle-control{display:none!important}.legacy .control-grid .kindle-control{display:inline-block!important}
+.legacy .control-grid>*{width:15.66%;margin:3px .5%;font-size:11px;padding:6px 3px}
+.legacy .control-grid .ink-control{width:49%}
+.legacy .hero>div{vertical-align:top}.legacy .hero>div:first-child{width:31%}
+.legacy .item-list[data-list="clocks"]{padding-bottom:0}
+.legacy .clock-date em{display:block}.legacy .clock small{margin-top:2px}
+.legacy-compact .block{padding:7px}.legacy-compact h2{font-size:12px;margin-bottom:5px}
+.legacy-compact .caption{font-size:10px;margin-bottom:5px}.legacy-compact .clock strong{font-size:30px}
+.legacy-compact .clock b,.legacy-compact .clock-date,.legacy-compact .clock small{font-size:11px;line-height:1.25}
+.legacy-compact .hero strong{font-size:44px}.legacy-compact .weather-facts{font-size:12px}
+.legacy-compact .weather-facts p{margin:2px 0;line-height:1.25}
+.legacy-compact .hero b{font-size:13px}.legacy-compact .hero span{font-size:11px}
+.legacy-compact .gpu-fields p{margin:3px 0}.legacy-compact .metric-grid{margin-top:5px}
+.legacy-compact .control-note{font-size:10px;margin-top:1px}
+@media(max-width:400px){
+ .legacy .control-grid>*{width:24%;margin:2px .5%;font-size:9px;padding:3px 2px}
+ .legacy .control-grid .ink-control{width:24%}
+ .legacy-compact .block{padding:5px}.legacy-compact h2{font-size:10px;margin-bottom:3px}
+ .legacy-compact .clock strong{font-size:20px}.legacy-compact .clock b,.legacy-compact .clock-date,.legacy-compact .clock small{font-size:9px;line-height:1.2}
+ .legacy-compact .caption{font-size:9px;margin-bottom:3px}.legacy-compact .hero strong{font-size:34px}.legacy-compact .weather-facts{font-size:9px}.legacy-compact .hero b{font-size:11px}.legacy-compact .hero span{font-size:9px}
+ .legacy-compact .forecast-tile{padding:2px 6px;font-size:11px}.legacy-compact .forecast-tile small{font-size:9px}
+ .legacy-compact .hour-summary strong{font-size:20px}.legacy-compact .day-summary span{font-size:10px}.legacy-compact .control-note{font-size:9px}
+}
+@media(max-width:400px){
+ .legacy-compact .detail-row,.legacy-compact .volume-card,.legacy-compact .volume-card p{font-size:11px;line-height:1.2}
+ .legacy-compact .detail-row p{margin:2px 0}.legacy-compact .gpu-name{margin-bottom:3px}.legacy-compact .gpu-fields p{margin:2px 0}.legacy-compact .sensor{font-size:10px}
+ .legacy-compact .hardware-summary{font-size:10px}.legacy-compact .metric-grid>div{font-size:11px}.legacy-compact .metric-grid strong{font-size:16px}.legacy-compact .metric-grid small{font-size:9px}
+}
+@media(max-height:450px){
+ .legacy-compact .block{padding:5px}.legacy-compact h2{font-size:10px;margin-bottom:3px}.legacy-compact .caption{font-size:9px;margin-bottom:3px}
+ .legacy-compact .clock strong{font-size:22px;margin:2px 0}.legacy-compact .clock b,.legacy-compact .clock-date,.legacy-compact .clock small{font-size:9px;line-height:1.2}.legacy-compact .clock-date em{display:inline-block}
+ .legacy-compact .hero strong{font-size:34px}.legacy-compact .hero b{font-size:11px}.legacy-compact .hero span{font-size:9px}.legacy-compact .weather-facts{font-size:9px}.legacy-compact .weather-facts p{margin:1px 0;line-height:1.2}
+ .legacy .control-grid>*{width:11.5%;font-size:9px;margin:2px .5%;padding:3px 2px}.legacy .control-grid .ink-control{width:11.5%}.legacy-compact .control-note{font-size:9px;margin-top:1px}
+ .legacy-compact .forecast-tile{font-size:11px;padding:2px 7px}.legacy-compact .forecast-tile small{font-size:9px}.legacy-compact .hour-summary strong{font-size:20px}
+ .legacy-compact .detail-row,.legacy-compact .volume-card,.legacy-compact .volume-card p,.legacy-compact .nas-status span{font-size:10px;line-height:1.2}.legacy-compact .gpu-name{margin-bottom:2px}.legacy-compact .gpu-fields p{margin:1px 0}.legacy-compact .detail-row p{margin:2px 0}
+}
+.legacy .clock-date em{display:inline-block}
+.legacy-compact [data-block="current"] h2{display:none}
+/* Touch/arrow scrolling remains available without a native scrollbar eating a
+   second strip of the already reserved Kindle viewport. */
+.legacy .scroll-rail{scrollbar-width:none}.legacy .scroll-rail::-webkit-scrollbar{display:none;height:0}
+@media(max-height:450px){
+ .legacy-compact .weather-facts p{float:left;width:50%;padding-right:3px}
+ .legacy-compact .hardware-summary{font-size:9px}.legacy-compact .metric-grid{margin-top:3px}.legacy-compact .metric-grid>div{font-size:10px}.legacy-compact .metric-grid strong{font-size:15px}.legacy-compact .metric-grid small{font-size:9px}
+ .legacy-compact .blank-metrics p{margin:4px 0;font-size:10px}.legacy-compact .notice{padding:5px;font-size:10px}.legacy-compact [data-block$="-offline"]>p{font-size:10px}
+}
+
+body.board.legacy{bottom:64px}
+.metric-grid>div:last-child strong{white-space:normal}
+@media(min-width:401px) and (max-width:700px) and (min-height:451px) and (max-height:700px){
+ .board:not(.legacy) .sheet[data-main="weather"]{grid-template-rows:112px minmax(145px,1fr) 110px 114px 86px}
+ .board:not(.legacy) [data-block="current"] h2{display:none}.board:not(.legacy) .clock strong{font-size:28px}.board:not(.legacy) .clock b,.board:not(.legacy) .clock-date,.board:not(.legacy) .clock small{font-size:11px}
+ .board:not(.legacy) .hero strong{font-size:44px}.board:not(.legacy) .weather-facts{font-size:12px}.board:not(.legacy) .caption{font-size:10px}
+ .board:not(.legacy) .forecast-tile{font-size:11px;padding:4px 7px}.board:not(.legacy) .forecast-tile small{font-size:10px}.board:not(.legacy) .hour-summary strong{font-size:22px}
+ .board:not(.legacy) .sheet:not([data-main="weather"]){grid-template-rows:80px 135px minmax(100px,1fr) 128px minmax(95px,.8fr)}
+ .board:not(.legacy) .scroll-rail{scrollbar-width:none}.board:not(.legacy) .scroll-rail::-webkit-scrollbar{display:none;height:0}
+}
+@media(min-width:701px) and (min-height:451px) and (max-height:550px){
+ .board:not(.legacy) .sheet:not([data-main="weather"]){grid-template-rows:130px minmax(130px,1fr) minmax(100px,1fr)}
+ .board:not(.legacy) .nas-summary{display:none}
+ .board:not(.legacy) [data-block$="-system"] h2{display:none}
+}
+@media(min-width:401px) and (max-width:700px) and (min-height:451px) and (max-height:700px){.board:not(.legacy) .control-grid{flex:none}}

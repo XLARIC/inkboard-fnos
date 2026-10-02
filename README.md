@@ -2,9 +2,9 @@
 
 面向 Kindle Voyage、闲置手机和 iPad 的局域网常驻看板。电脑端管理与设备设置采用彩色控制台，设备页提供模式、字号和轮播效果预览；资源随应用打包，局域网使用不依赖外部 CDN。Kindle 和彩色看板使用独立入口。Go 服务、服务端 HTML、轻量脚本，无外部字体或 CDN。默认中文、摄氏度、24 小时制。
 
-**当前为 0.1.0-alpha.6 预览版。** 可运行服务、两种架构的原生 FPK、Docker 运行方式及自动测试已准备。飞牛 x86 已完成原生安装、保留配置升级与局域网入口检查；硬件采集、Kindle Voyage、iOS 15、Android 的实机验收仍待完成，尚未上架市场。见 [验收记录](docs/验收记录.md)。
+**当前为 0.1.0-alpha.7 预览版。** 可运行服务、两种架构的原生 FPK、Docker 运行方式及自动测试已准备。飞牛 x86 已完成原生安装、保留配置升级与局域网入口检查；硬件采集、Kindle Voyage、iOS 15、Android 的实机验收仍待完成，尚未上架市场。见 [验收记录](docs/验收记录.md)。
 
-[下载预览安装包](https://github.com/XLARIC/inkboard-fnos/releases/tag/v0.1.0-alpha.6) · [验收记录](docs/验收记录.md)
+[下载预览安装包](https://github.com/XLARIC/inkboard-fnos/releases/tag/v0.1.0-alpha.7) · [验收记录](docs/验收记录.md)
 
 ![彩色看板演示](docs/screenshots/one-screen-weather.jpg)
 
@@ -42,7 +42,7 @@ Intel 利用率需要系统提供 intel_gpu_top，NVIDIA 需要 nvidia-smi，AMD
 
 ## Docker：纯天气看板
 
-容器不通过特权权限读取宿主机硬件。公开镜像为 ghcr.io/xlaric/inkboard-fnos:v0.1.0-alpha.6（amd64／arm64）。本次 macOS 环境直接拉取返回 denied，以下源码构建方式已验证可用；详见验收记录。
+容器不通过特权权限读取宿主机硬件。公开镜像为 ghcr.io/xlaric/inkboard-fnos:v0.1.0-alpha.7（amd64／arm64）。本次 macOS 环境直接拉取返回 denied，以下源码构建方式已验证可用；详见验收记录。
 
     cp .env.example .env
     # 把 .env 中 INKBOARD_BIND_IP 改为主机的局域网 IP
@@ -118,3 +118,5 @@ Open-Meteo 默认 past_days=1、forecast_days=16，每 30 分钟更新。小时�
 MIT 许可证，见 [第三方许可和数据条件](THIRD_PARTY_NOTICES.md)。提交诊断前删除地址、序列号、密码、配对码及密钥。
 
 按 [飞牛官方开发指南](https://developer.fnnas.com/docs/category/开发指南/)准备原生包、向导、权限和生命周期。申请市场仍需实机验收、真实截图、已测试系统版本和架构、资源占用记录及官方审核。见 [上架清单](docs/上架清单.md)。打包成功不等于市场审核通过。
+
+Kindle 黑白入口默认预留底部 64 像素，避开覆盖网页的固定导航栏。天气屏的「底部留白」按钮可循环调整 0／48／64／80／96／120 像素，设备设置页可输入 0–200；仅保存在当前浏览器。也可用 `/basic?bottom=96` 指定留白。区块按内容实际高度排布，留白调整、旋转和局部同步不会跳回首页。
