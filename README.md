@@ -2,7 +2,7 @@
 
 面向 Kindle Voyage、闲置手机和 iPad 的局域网常驻看板。电脑端管理与设备设置采用彩色控制台，设备页提供模式、字号和轮播效果预览；资源随应用打包，局域网使用不依赖外部 CDN。Kindle 和彩色看板使用独立入口。Go 服务、服务端 HTML、轻量脚本，无外部字体或 CDN。默认中文、摄氏度、24 小时制。
 
-**当前为 0.1.0-alpha.5 预览版。** 可运行服务、两种架构的原生 FPK、Docker 运行方式及自动测试已准备。飞牛 x86 已完成一次原生安装与局域网入口检查；硬件采集、Kindle Voyage、iOS 15、Android 的实机验收仍待完成，尚未上架市场。见 [验收记录](docs/验收记录.md)。
+**当前为 0.1.0-alpha.5 预览版。** 可运行服务、两种架构的原生 FPK、Docker 运行方式及自动测试已准备。飞牛 x86 已完成原生安装、保留配置升级与局域网入口检查；硬件采集、Kindle Voyage、iOS 15、Android 的实机验收仍待完成，尚未上架市场。见 [验收记录](docs/验收记录.md)。
 
 [下载预览安装包](https://github.com/XLARIC/inkboard-fnos/releases/tag/v0.1.0-alpha.5) · [验收记录](docs/验收记录.md)
 
