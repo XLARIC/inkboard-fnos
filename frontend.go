@@ -27,6 +27,7 @@ var templates = template.Must(template.New("").Funcs(template.FuncMap{
 type Block struct {
 	Source    template.HTML
 	ID, Title string
+	ListKind  string
 	Rows      []template.HTML
 	Content   template.HTML
 }
@@ -165,7 +166,7 @@ func (a *App) groupsForSelection(d Display, history bool, selectedDate, selected
 			if date != today {
 				title = date + " · 分时天气"
 			}
-			g.Blocks = append(g.Blocks, Block{ID: "today", Title: title, Rows: rows})
+			g.Blocks = append(g.Blocks, Block{ID: "today", Title: title, Rows: rows, ListKind: "hours"})
 			rows = []template.HTML{}
 			yesterday := d.Now.In(loc).AddDate(0, 0, -1).Format("2006-01-02")
 			for _, day := range w.Days {
@@ -182,7 +183,7 @@ func (a *App) groupsForSelection(d Display, history bool, selectedDate, selected
 					Yesterday bool
 				}{day, label, day.Date == yesterday}))
 			}
-			g.Blocks = append(g.Blocks, Block{ID: "forecast", Title: "昨天 · 今天 · 未来 15 天", Rows: rows})
+			g.Blocks = append(g.Blocks, Block{ID: "forecast", Title: "昨天 · 今天 · 未来 15 天", Rows: rows, ListKind: "days"})
 		}
 		if d.Weather != nil {
 			for i := range g.Blocks {
@@ -215,7 +216,7 @@ func (a *App) groupsForSelection(d Display, history bool, selectedDate, selected
 			continue
 		}
 		g.Blocks = append(g.Blocks, Block{ID: n.ID + "-system", Title: "CPU · 内存 · 运行时间", Content: renderPart("system", s)})
-		b := Block{ID: n.ID + "-gpu", Title: "GPU"}
+		b := Block{ID: n.ID + "-gpu", Title: "GPU", ListKind: "gpu"}
 		for _, v := range s.GPUs {
 			b.Rows = append(b.Rows, renderPart("gpu", v))
 		}
@@ -223,7 +224,7 @@ func (a *App) groupsForSelection(d Display, history bool, selectedDate, selected
 			b.Content = renderPart("missing", "未检测到支持的 GPU 驱动")
 		}
 		g.Blocks = append(g.Blocks, b)
-		b = Block{ID: n.ID + "-volumes", Title: fmt.Sprintf("存储空间 · %d 个", len(s.Volumes))}
+		b = Block{ID: n.ID + "-volumes", Title: fmt.Sprintf("存储空间 · %d 个", len(s.Volumes)), ListKind: "volumes"}
 		for _, v := range s.Volumes {
 			b.Rows = append(b.Rows, renderPart("volume", v))
 		}
@@ -237,7 +238,7 @@ func (a *App) groupsForSelection(d Display, history bool, selectedDate, selected
 				external++
 			}
 		}
-		b = Block{ID: n.ID + "-disks", Title: fmt.Sprintf("物理磁盘 · %d 块 / 内置 %d / 外接 %d", len(s.Disks), len(s.Disks)-external, external)}
+		b = Block{ID: n.ID + "-disks", Title: fmt.Sprintf("物理磁盘 · %d 块 / 内置 %d / 外接 %d", len(s.Disks), len(s.Disks)-external, external), ListKind: "disks"}
 		for _, v := range s.Disks {
 			b.Rows = append(b.Rows, renderPart("disk", v))
 		}
@@ -246,7 +247,7 @@ func (a *App) groupsForSelection(d Display, history bool, selectedDate, selected
 		}
 		g.Blocks = append(g.Blocks, b)
 		for _, kind := range []string{"network", "io"} {
-			b = Block{ID: n.ID + "-" + kind, Title: "网络 · 收 / 发"}
+			b = Block{ID: n.ID + "-" + kind, Title: "网络 · 收 / 发", ListKind: "traffic"}
 			items := s.Network
 			if kind == "io" {
 				b.Title = "磁盘读写"
@@ -260,7 +261,7 @@ func (a *App) groupsForSelection(d Display, history bool, selectedDate, selected
 			}
 			g.Blocks = append(g.Blocks, b)
 		}
-		b = Block{ID: n.ID + "-sensors", Title: "温度与风扇"}
+		b = Block{ID: n.ID + "-sensors", Title: "温度与风扇", ListKind: "sensors"}
 		for _, v := range s.Sensors {
 			b.Rows = append(b.Rows, renderPart("sensor", v))
 		}

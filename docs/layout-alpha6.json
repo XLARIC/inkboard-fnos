@@ -1,0 +1,545 @@
+{
+  "version": "0.1.0-alpha.6",
+  "kind": "browser-layout-simulation",
+  "device_pass": false,
+  "font": "normal",
+  "scenarios": [
+    {
+      "entry": "/?mode=mobile",
+      "size": "320x568",
+      "main": "weather",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "hours",
+        "days"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "320x568",
+      "main": "local",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "volumes",
+        "disks",
+        "traffic",
+        "sensors"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "320x568",
+      "main": "powerful",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "568x320",
+      "main": "weather",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "clocks",
+        "hours",
+        "days"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "568x320",
+      "main": "local",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "volumes",
+        "disks",
+        "traffic",
+        "sensors"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "568x320",
+      "main": "powerful",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "375x667",
+      "main": "weather",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "hours",
+        "days"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "375x667",
+      "main": "local",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "disks",
+        "traffic"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "375x667",
+      "main": "powerful",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "667x375",
+      "main": "weather",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "clocks",
+        "hours",
+        "days"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "667x375",
+      "main": "local",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "disks",
+        "traffic"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "667x375",
+      "main": "powerful",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "390x844",
+      "main": "weather",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "hours",
+        "days"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "390x844",
+      "main": "local",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "disks"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "390x844",
+      "main": "powerful",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "844x390",
+      "main": "weather",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "hours",
+        "days"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "844x390",
+      "main": "local",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "disks",
+        "traffic"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "844x390",
+      "main": "powerful",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "600x800",
+      "main": "weather",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "hours",
+        "days"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "600x800",
+      "main": "local",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "disks",
+        "traffic"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "600x800",
+      "main": "powerful",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "800x600",
+      "main": "weather",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "hours",
+        "days"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "800x600",
+      "main": "local",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "disks"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "800x600",
+      "main": "powerful",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "768x1024",
+      "main": "weather",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "hours",
+        "days"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "768x1024",
+      "main": "local",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "disks"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "768x1024",
+      "main": "powerful",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "1024x768",
+      "main": "weather",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "hours",
+        "days"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "1024x768",
+      "main": "local",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "disks"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "1024x768",
+      "main": "powerful",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "820x1180",
+      "main": "weather",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "hours",
+        "days"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "820x1180",
+      "main": "local",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "disks"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "820x1180",
+      "main": "powerful",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "1180x820",
+      "main": "weather",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "hours",
+        "days"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "1180x820",
+      "main": "local",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "disks"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "1180x820",
+      "main": "powerful",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "1024x1366",
+      "main": "weather",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "hours",
+        "days"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "1024x1366",
+      "main": "local",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "1024x1366",
+      "main": "powerful",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "1366x1024",
+      "main": "weather",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "hours",
+        "days"
+      ]
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "1366x1024",
+      "main": "local",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    },
+    {
+      "entry": "/?mode=mobile",
+      "size": "1366x1024",
+      "main": "powerful",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    },
+    {
+      "entry": "/basic",
+      "size": "600x800",
+      "main": "weather",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "hours",
+        "days"
+      ]
+    },
+    {
+      "entry": "/basic",
+      "size": "600x800",
+      "main": "local",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "disks",
+        "traffic"
+      ]
+    },
+    {
+      "entry": "/basic",
+      "size": "600x800",
+      "main": "powerful",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    },
+    {
+      "entry": "/basic",
+      "size": "800x600",
+      "main": "weather",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "hours",
+        "days"
+      ]
+    },
+    {
+      "entry": "/basic",
+      "size": "800x600",
+      "main": "local",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "disks"
+      ]
+    },
+    {
+      "entry": "/basic",
+      "size": "800x600",
+      "main": "powerful",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    },
+    {
+      "entry": "/basic",
+      "size": "320x568",
+      "main": "weather",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "hours",
+        "days"
+      ]
+    },
+    {
+      "entry": "/basic",
+      "size": "320x568",
+      "main": "local",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "volumes",
+        "disks",
+        "traffic"
+      ]
+    },
+    {
+      "entry": "/basic",
+      "size": "320x568",
+      "main": "powerful",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    },
+    {
+      "entry": "/basic",
+      "size": "568x320",
+      "main": "weather",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "clocks",
+        "hours",
+        "days"
+      ]
+    },
+    {
+      "entry": "/basic",
+      "size": "568x320",
+      "main": "local",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": [
+        "volumes",
+        "disks",
+        "traffic",
+        "sensors"
+      ]
+    },
+    {
+      "entry": "/basic",
+      "size": "568x320",
+      "main": "powerful",
+      "cuts": [],
+      "blocksOutside": [],
+      "scrolling": []
+    }
+  ]
+}
